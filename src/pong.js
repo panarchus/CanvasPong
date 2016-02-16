@@ -39,7 +39,8 @@ var ball = {
 	y: canvas.height-30,
 	radius: 20,
 	dx: 4,
-	dy: -4
+	dy: -4,
+	accel: 1.1
 };
 
 // paddle details (x,y will correspond to top-left corner, like the canvas x,y)
@@ -58,6 +59,7 @@ function init() {
 	ball.radius = 20;
 	ball.dx = 4;
 	ball.dy = -4;
+	ball.accel = 1.1;
 	
 	paddle.h = 100;
 	paddle.w = 10;
@@ -71,7 +73,7 @@ function init() {
 function drawBall() {
 	ctx.beginPath();
 	ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
-	ctx.fillStyle = "#0095D";
+	ctx.fillStyle = "#fff";
 	ctx.fill();
 	ctx.closePath();
 }
@@ -89,8 +91,9 @@ function updateBall() {
 	} else if (ball.x + ball.dx < paddle.x + paddle.w + ball.radius) {
 		// check for collision with paddle
 		if (ball.y >= paddle.y && ball.y <= paddle.y + paddle.h) {
-			// hit paddle, speed up by 1.5x
-			ball.dx = (-ball.dx * 5) / 4;
+			// hit paddle, speed up by 1.1x
+			ball.accel *= 1.1;
+			ball.dx = base_dy*ball.accel * (ball.dx > 0 ? -1 : 1);
 			++score;
 		}
 	}
@@ -141,6 +144,4 @@ function draw() {
 	requestAnimationFrame(draw);
 }
 draw();
-// run  draw() every 10 ms
-//setInterval(draw, 10);
 
