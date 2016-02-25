@@ -1,4 +1,3 @@
-// CANVAS DRAW logic
 (function(canvasDraw, undefined) {
 	var canvas = document.getElementById("game");
 	var ctx = canvas.getContext("2d");
