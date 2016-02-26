@@ -1,10 +1,10 @@
-(function(canvasDraw, undefined) {
+(function(canvasPainter, undefined) {
 	var canvas = document.getElementById("game");
 	var ctx = canvas.getContext("2d");
 	var toDraw = [], running, lastFrame;
 	
 	// API main draw loop
-	canvasDraw.draw = function() {
+	canvasPainter.draw = function() {
 		var delta = requestAnimFrame();
 		
 		if (running) {
@@ -20,7 +20,7 @@
 		// helper method to run get delta value since last frame
 		// and run the requestAnimationFrame() call
 		function requestAnimFrame() {
-			requestAnimationFrame(canvasDraw.draw);
+			requestAnimationFrame(canvasPainter.draw);
 			var delta = 0;
 			var now = Date.now();
 			if (lastFrame) {
@@ -42,13 +42,13 @@
 	
 	// API: add an object to be drawn (object should have 
 	// draw() and update(delta) methods)
-	canvasDraw.addObjectToDraw = function(obj) {
+	canvasPainter.addObjectToDraw = function(obj) {
 		toDraw.push(obj);
 	};
 	
 	// API: start/pause
-	canvasDraw.toggleRunning = function() {
+	canvasPainter.toggleRunning = function() {
 		running = !running;
 	};
 	
-}) (window.canvasDraw = window.canvasDraw || {});
+}) (window.canvasPainter = window.canvasPainter || {});
