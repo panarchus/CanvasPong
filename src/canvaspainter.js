@@ -50,5 +50,10 @@
 	canvasPainter.toggleRunning = function() {
 		running = !running;
 	};
-	
+
+	// API: specifically pause
+	canvasPainter.pause = function() {
+		running = false;
+	}
+
 }) (window.canvasPainter = window.canvasPainter || {});

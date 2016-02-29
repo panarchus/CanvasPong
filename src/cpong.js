@@ -5,13 +5,37 @@
 	var paddles = [];
 	var balls = [];
 	var scores = { left: 0, right: 0 };
+	var stopUpdates = false;
 
 	// API
 	cPong.getScore = function() {
 		return scores;
 	}
 
-	/// Button press handling
+	// API
+	cPong.setScores = function(left, right) {
+		scores.left = left;
+		scores.right = right;
+	}
+
+	// API
+	cPong.reset = function() {
+		for (ballname in balls) {
+			var ball = balls[ballname];
+			if (!balls.hasOwnProperty(ball)) continue;
+
+			// reset vectors
+			ball.initialize && ball.initialize();
+
+			stopUpdates = true;
+		}
+	}
+
+	// API: toggle pause/stop updates
+	cPong.toggleUpdates = function() {
+		stopUpdates = !stopUpdates;
+	}
+
 	function keyDownHandler(e) {
 		pressedKeys[e.keyCode] = true;
 	};
@@ -29,21 +53,31 @@
 
 	// ball object
 	cPong.Ball = function(name, startVel, velGrowFactor) {
+		this.initialize = function() {
+			var yd = (Math.random()+0.5)/2.0, xd = Math.random()+0.5;
+			var vmag = Math.sqrt(yd*yd + xd*xd);
+			this.dir = { x: xd/vmag * (Math.random() < .5 ? -1. : 1.), y: yd/vmag * (Math.random() < .5 ? -1. : 1.) };
+			// position
+			this.pos = { x: canvas.width/2, y: canvas.height/2 };
+		};
+
 		this.name = name;
 		// speed is in pixels/second
 		this.vel = startVel;
 		this.velGrow = this.vel * velGrowFactor;
 		// normalized vector
-		var yd = (Math.random()+0.5)/2.0, xd = Math.random()+0.5;
-		var vmag = Math.sqrt(yd*yd + xd*xd);
-		this.dir = { x: xd/vmag * (Math.random() < .5 ? -1. : 1.), y: yd/vmag * (Math.random() < .5 ? -1. : 1.) };
+		this.dir = { x: 0., y: 0. };
 		// position
-		this.pos = { x: canvas.width/2, y: canvas.height/2 };
+		this.pos = { x: 0, y: 0 };
+		// initialize vectors
+		this.initialize();
+
 		// radius
 		this.radius = 10;
 		
 		// update position
 		this.update = function(delta) {
+			if (stopUpdates) return;
 			// create dx and dy scalar values
 			var dx = Math.abs(this.dir.x * this.vel * delta / 1000);
 			var dy = Math.abs(this.dir.y * this.vel * delta / 1000);
@@ -124,6 +158,7 @@
 
 		// update position
 		this.update = function(delta) {
+			if (stopUpdates) return;
 			//get up/down values
 			var up = isPressed(this.upKey);
 			var down = isPressed(this.downKey);
