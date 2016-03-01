@@ -7,6 +7,8 @@ ctx.font = "24px Arial";
 ctx.fillStyle = "#0095DD";
 
 var gameover = false;
+var restart = false;
+var endscore = 10;
 
 // game objects
 var paddleLeft = new cpong.Paddle("left", 10, 100, 87, 83, true);
@@ -19,14 +21,16 @@ var scoreDisplay = {
 		ctx.fillText(this.scores.left, canvas.width/4, 25);
 		ctx.fillText(this.scores.right, canvas.width*3/4, 25);
 
-		if (gameover) {
-			ctx.fillText("GAME OVER", canvas.width/2-100, canvas.height/2-25);
+		if (gameover || restart) {
+			painter.pause();
+			restart = false;
+			if (gameover) ctx.fillText("GAME OVER", canvas.width/2-100, canvas.height/2-25);
 		}
 	},
 
 	update: function(delta) {
 		this.scores = cpong.getScore();
-		if (this.scores.left == 10 || this.scores.right == 10) gameover = true;
+		if (this.scores.left == endscore || this.scores.right == endscore) gameover = true;
 		else gameover = false;
 	}
 };
@@ -34,12 +38,20 @@ var scoreDisplay = {
 // start/stop/restart
 function keyUpHandler(e) {
 	// space bar = pause/unpause
-	if (e.keyCode == 32) painter.toggleRunning();
+	if (e.keyCode == 32) {
+		if (gameover) {
+			cpong.setScores(0, 0);
+			cpong.reset();
+		}
+		painter.toggleRunning();
+		cpong.startUpdates();
+	}
 
 	// 'n' = new game
 	if (e.keyCode == 78) {
 		cpong.setScores(0, 0);
 		cpong.reset();
+		restart = true;
 	}
 }
 document.addEventListener("keyup", keyUpHandler, false);

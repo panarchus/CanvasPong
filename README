@@ -2,7 +2,14 @@ Welcome to Canvas Pong!
 
 This is a repo for a project that I'm starting that is simply Pong built for HTML5 on CANVAS.
 
-The basics are being taken from these guides: https://developer.mozilla.org/en-US/docs/Games/Workflows/2D_Breakout_game_pure_JavaScript http://blog.mailson.org/2013/02/simple-pong-game-using-html5-and-canvas/ and then I decided to spice it up a bit with some code modularization (I'm a JS newbie, so it's an excuse to try out different things)
+The basics are being taken from these guides: https://developer.mozilla.org/en-US/docs/Games/Workflows/2D_Breakout_game_pure_JavaScript http://blog.mailson.org/2013/02/simple-pong-game-using-html5-and-canvas/ and then I decided to spice it up a bit with some code modularization (I'm a JS newbie, so it's an excuse to try out different things). The end result is a bit messy, in part because I didn't too a great job separating different functionalities, but for now it is good enough.
 
-Player controls: up/down to move (right), w/s to move (left), space to pause/start
+I attempted a better* collision detection (and currently the ball does appear to not come in contact with the paddles/walls...) in the collision_trial.js file, however it didn't work immediately and I am more interested in getting it out there and moving on to another project for the moment. I will probably at some point come back and make this better or re-write with an actual library.
+
+In the meantime, here are the controls:
+
+Player 1: w/s (up/down)
+Player 2: up/down
+Pause/unpause: space bar
+New game: n
 

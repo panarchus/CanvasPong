@@ -21,8 +21,8 @@
 	// API
 	cPong.reset = function() {
 		for (ballname in balls) {
+			if (!balls.hasOwnProperty(ballname)) continue;
 			var ball = balls[ballname];
-			if (!balls.hasOwnProperty(ball)) continue;
 
 			// reset vectors
 			ball.initialize && ball.initialize();
@@ -31,9 +31,9 @@
 		}
 	}
 
-	// API: toggle pause/stop updates
-	cPong.toggleUpdates = function() {
-		stopUpdates = !stopUpdates;
+	// API
+	cPong.startUpdates = function() {
+		stopUpdates = false;
 	}
 
 	function keyDownHandler(e) {
@@ -53,22 +53,25 @@
 
 	// ball object
 	cPong.Ball = function(name, startVel, velGrowFactor) {
-		this.initialize = function() {
-			var yd = (Math.random()+0.5)/2.0, xd = Math.random()+0.5;
-			var vmag = Math.sqrt(yd*yd + xd*xd);
-			this.dir = { x: xd/vmag * (Math.random() < .5 ? -1. : 1.), y: yd/vmag * (Math.random() < .5 ? -1. : 1.) };
-			// position
-			this.pos = { x: canvas.width/2, y: canvas.height/2 };
-		};
-
 		this.name = name;
 		// speed is in pixels/second
+		this.startVel = startVel;
 		this.vel = startVel;
 		this.velGrow = this.vel * velGrowFactor;
 		// normalized vector
 		this.dir = { x: 0., y: 0. };
 		// position
 		this.pos = { x: 0, y: 0 };
+
+		this.initialize = function() {
+			var yd = (Math.random()+0.5)/2.0, xd = Math.random()+0.5;
+			var vmag = Math.sqrt(yd*yd + xd*xd);
+			this.dir = { x: xd/vmag * (Math.random() < .5 ? -1. : 1.), y: yd/vmag * (Math.random() < .5 ? -1. : 1.) };
+			// position
+			this.pos = { x: canvas.width/2, y: canvas.height/2 };
+			this.vel = this.startVel;
+		};
+
 		// initialize vectors
 		this.initialize();
 
